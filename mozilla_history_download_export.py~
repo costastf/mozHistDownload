@@ -36,8 +36,10 @@ if __name__=='__main__':
         cur=con.cursor()
         links={}
         for row in cur.execute('select place_id from moz_historyvisits where visit_type="7"').fetchall():
-            name = cur.execute('select content from moz_annos where place_id=%d and anno_attribute_id="15"'% row[0]).fetchone()[0]
-            url = cur.execute('select url from moz_places where id=%d'% row[0]).fetchone()[0]
+            cur.execute('select content from moz_annos where place_id=%d and anno_attribute_id="15"'% row[0])
+            name = cur.fetchone()[0]
+            cur.execute('select url from moz_places where id=%d'% row[0])
+            url = cur.fetchone()[0]
             links[name]=url
     except Exception, e:
 	    print('Something happened.\nTraceback :{0}'.format(e))
